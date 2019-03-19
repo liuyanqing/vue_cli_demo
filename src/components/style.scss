@@ -1,0 +1,19 @@
+.show-value {
+  display: inline-block;
+  margin-left: 20px;
+}
+.input {
+  background: #f6f6f6;
+  border-radius: 15px;
+  padding: 0 15px;
+  line-height: $row-height;
+  
+  input {
+    background: transparent;
+    outline: none;
+    border: none;
+  }
+}
+.inputName {
+  font-weight: bold;
+}

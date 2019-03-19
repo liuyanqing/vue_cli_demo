@@ -17,8 +17,16 @@ module.exports = {
     ? '//'
     : '/',
   productionSourceMap: false,
+  css: {
+    loaderOptions: {
+      // 给 sass-loader 传递选项
+      sass: {
+        // @/ 是 src/ 的别名
+        data: `@import "@/style/var.scss"; @import "@nutui/nutui/dist/styles/index.scss";`
+      }
+    }
+  },
   configureWebpack: config => {
-    console.log(config)
     if (process.env.NODE_ENV === 'production') {
       return {
         plugins: [
@@ -29,7 +37,14 @@ module.exports = {
         },
       }
     } else {
-
+      return {
+        plugins: [
+          new HtmlWebpackInlineSourcePlugin()
+        ],
+        externals: {
+          'vue': 'Vue',
+        },
+      }
     }
   },
   chainWebpack: config => {

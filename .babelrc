@@ -3,7 +3,9 @@
     [
       "@nutui/babel-plugin-separate-import",
       {
-        "style": "css"
+        "libraryName": "@nutui/nutui",
+        "libraryDirectory": "dist/packages",
+        "style": "scss"
       }
     ]
   ]

@@ -1,5 +1,5 @@
 <template>
-  <div :class="['input', inputClass]">
+  <div :class="['input', customClass, inputClass]">
     <input type="text"
       v-model="value"
       :placeholder="placeholder"
@@ -11,12 +11,18 @@
 </template>
 
 <script>
+import './style.scss'
+
 export default {
   name: 'Input',
   props: {
     placeholder: {
 			type: String
 		},
+    customClass: {
+      type: String,
+      default:'',
+    }
   },
   data() {
     return {
@@ -25,6 +31,16 @@ export default {
     }
   },
   methods: {
+    scrollIntoView (time = 0) {
+      if (/iphone/i.test(navigator.userAgent)) {
+        // return
+      }
+      if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') {
+        setTimeout(() => {
+          this.$refs.input.scrollIntoViewIfNeeded(true)
+        }, time)
+      }
+    },
     focusFun: function() {
       this.inputFocusAnimation = true;
       this.$emit('focus');
@@ -46,15 +62,3 @@ export default {
   }
 }
 </script>
-<style lang="less" scoped>
-  .input {
-    background: #f6f6f6;
-    border-radius: 15px;
-    padding: 0 15px;
-    input {
-      background: transparent;
-      outline: none;
-      border: none;
-    }
-  }
-</style>
