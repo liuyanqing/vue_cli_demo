@@ -1,29 +1,30 @@
 /**
- "off" or 0 - turn the rule off
- "warn" or 1 - turn the rule on as a warning (doesn’t affect exit code)
- "error" or 2 - turn the rule on as an error (exit code is 1 when triggered)
-*/
+ * eslint rules 整理，基于 eslint v5.1.0，eslint-plugin-react v7.10.0，后续会持续升级的
+ * "off" or 0 - turn the rule off
+ * "warn" or 1 - turn the rule on as a warning (doesn’t affect exit code)
+ * "error" or 2 - turn the rule on as an error (exit code is 1 when triggered)
+ */
 module.exports = {
-  "rules": {
-    "for-direction": 2,
-    "getter-return": 2,
-    "no-await-in-loop": 2, // Disallow await inside of loops
-    "no-compare-neg-zero": 2, // 不要出现负零，即 -0
-    "no-cond-assign": 2, // 条件语句中，不应该出现 = ，比如 if (x = 2) {  } 是会报错的
-    "no-console": 0, // 是否允许 console
+  root: true,
+  env: {
+    node: true,
   },
-  "root": true, // 设置他后，子的js文件找到该 eslint配置文件后，则不再向上查找其他eslint配置文件
-  "env": {
-    "node": true
-  },
-  "extends": [
-    "plugin:vue/essential",
-    "eslint:recommended"
+  extends: [
+    'plugin:vue/essential',
   ],
-  "parserOptions": {
-    "parser": "babel-eslint"
+  rules: {
+    'no-console': process.env.NODE_ENV === 'production' ? 2 : 0,
+    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
+    'semi': [0, 'always'], // 总是要求加上分号
+    "no-unused-vars": [0, { "vars": "all", "args": "none" }],
+    "arrow-parens": [0], // 对于箭头函数，需要添加括号，比如(a) => {}; 而不应该简写为 a => {};
+    "prefer-destructuring": [2, {
+      "array": false,
+    }, {
+        "enforceForRenamedProperties": false
+      }], // 尽量使用解构表达式，比如 const [foo] = array; 或 const {bar: foo} = object;
   },
-  "plugins": [
-    "html"
-  ]
+  parserOptions: {
+    parser: 'babel-eslint',
+  },
 };

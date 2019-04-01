@@ -1,28 +1,21 @@
-import Vue from 'vue'
-import { 
-  Button, 
-  Imagepicker, 
-  Datepicker, 
-  Actionsheet, 
-  Picker, 
-  Row, 
-  Col, 
-  Cell 
-} from '@nutui/nutui';
-import App from './App.vue'
-import 'normalize.css'
-import './style/index.scss'
+import Vue from 'vue';
+import axios from 'axios';
+import VueAxios from 'vue-axios';
+import App from './App.vue';
+import './utils/share';
+import './style/index.scss';
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
-Button.install(Vue)
-Imagepicker.install(Vue)
-Datepicker.install(Vue)
-Actionsheet.install(Vue)
-Picker.install(Vue)
-Row.install(Vue)
-Col.install(Vue)
-Cell.install(Vue)
+const axiosInstance = axios.create({
+  baseURL: process.env.NODE_ENV === 'production' ? '//' : '//',
+  headers: {
+    'access-control-allow-origin': '*',
+    'access-control-allow-methods': 'GET, POST, OPTIONS, PUT, DELETE',
+  },
+});
+
+Vue.use(VueAxios, axiosInstance);
 
 new Vue({
   render: h => h(App),

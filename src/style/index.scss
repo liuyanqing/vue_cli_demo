@@ -1,3 +1,125 @@
 ::-webkit-scrollbar {
   width: 0;
 }
+
+p {
+  margin: 0;
+}
+
+#app {
+  font-family: sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  max-width: 540px;
+  margin: 0 auto;
+  font-size: 16px;
+  overflow: hidden;
+  color: #333;
+}
+
+:global {
+  .nut-button {
+    background: $primary-color;
+    font-size: 16px;
+    padding: 0;
+    &.primary {
+      border: 1px solid $primary-color;
+      background: #fff;
+      color: $primary-color;
+    }
+    &.fixed {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 46px;
+    }
+  }
+  .nut-imagepicker {
+    margin-bottom: 20px;
+    .img-list {
+      display: block;
+      .img-item {
+        position: relative;
+      }
+    }
+  }
+  .nut-picker-control .nut-picker-cancel-btn, .nut-picker-control .nut-picker-confirm-btn {
+    color: $primary-color;
+  }
+  .nut-noticebar {
+    height: 36px;
+    background: #FCF7E8;
+    color: #F5A623;
+    font-size: 14px;
+    padding: 0 16px;
+    .wrap {
+      color: #F5A623;
+    }
+    .content {
+      padding: 0;
+      background: transparent;
+    }
+  }
+  .nut-dialog-image-wrapper {
+    .nut-dialog-close {
+      display: none;
+    }
+    .nut-dialog {
+      max-width: 98%;
+      max-height: 80%;
+    }
+  }
+}
+
+.rule-dialog {
+  .nut-dialog {
+    background: rgba(0, 0, 0, .8);
+    .nut-dialog-title {
+      color: #fff;
+    }
+    .nut-dialog-body {
+      padding: 16px 24px;
+    }
+    .nut-dialog-content {
+      line-height: 20px;
+      color: #ddd;
+      h3 {
+        margin: 0;
+        color: #fff;
+      }
+    }
+  }
+}
+
+.title {
+  text-align: center;
+  margin: 20px 0 25px;
+  line-height: 12px;
+  h3 {
+    margin: 0;
+  }
+  span {
+    height: 2px;
+    width: 52px;
+    background: $primary-color;
+    display: inline-block;
+  }
+}
+
+.decorateLine {
+  display: inline-block;
+  width: 4px;
+  height: 16px;
+  margin-right: 5px;
+  background-color: $primary-color;
+  vertical-align: middle;
+}
+
+.c-primary {
+  color: $primary-color;
+}
+
+.nut-col.p-l {
+  padding-left: 16px; 
+}

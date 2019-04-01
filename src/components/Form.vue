@@ -1,111 +1,165 @@
 <template>
   <div>
-    <Input 
-      v-model="input" 
-      placeholder="edit me"
-      @input="inputFun"
-      @blur="blurFun"
-    />
-    <p>Message is: {{ input }}</p>
-    <nut-imagepicker
-      @imgMsg="imgMsg"
-      :max="1"
+    <Imagepicker @imgMsg="imgMsg" :max="1" :imgList="imgList" delMode="longtap" autoUpload />
+    <FormItem
+      :showIcon="true"
+      @click.native="switchPicker('isVisibleDate')"
     >
-    </nut-imagepicker>
-    <nut-button
-      block
-      shape="circle"
-      :class="classObject"
-      @click="clickHandler"
-    >
-      预约专属服务
-    </nut-button>
-    <nut-cell :showIcon="true" :isLink="true" @click.native="switchPicker('isVisibleDate')">
-      <span slot="title">
-        <label>日期选择</label>
-      </span>
-      <span slot="sub-title">有默认值，限制开始结束时间~~~</span>
-      <div slot="desc" class="selected-option">
-        <span class="show-value">{{datetime ? datetime : '请选择'}}</span>
+      <label slot="label">
+        到期日
+      </label>
+      <div slot="field" class="input">
+        {{ maturityDate ? maturityDate : "请选择" }}
       </div>
-    </nut-cell>
-    <nut-datepicker 
+    </FormItem>
+    <FormItem>
+      <label slot="label">
+        票据号
+      </label>
+      <div slot="field">
+        <Input
+          title="票据号"
+          mask="1,12,8,8,1"
+          class="inputName"
+          v-model="draftNo"
+          @onChange="changeDraftNo"
+          :max="30"
+        />
+      </div>
+    </FormItem>
+    <FormItem>
+      <label slot="label">
+        票面金额
+      </label>
+      <div slot="field">
+        <Input
+          title="票面金额"
+          v-model="draftAmount"
+          :max="15"
+          @onChange="changeAmount"
+        />
+      </div>
+    </FormItem>
+    <FormItem>
+      <label slot="label">
+        承兑行行号
+      </label>
+      <div slot="field">
+        <Input
+          title="承兑行行号"
+          mask="1,12,8,8,1"
+          v-model="acceptorBankCnasp"
+          :max="12"
+          @onChange="changeBankCnasp"
+        />
+      </div>
+    </FormItem>
+    
+    <nut-datepicker
       :is-visible="isVisibleDate"
-      title="请选择日期" 
+      title="请选择日期"
       type="date"
-      startDate="1991-11-10"
-      defaultValue="2018-11-02"
+      :startDate="startDate"
+      :defaultValue="maturityDate || startDate"
+      endDate="3000-01-01"
       @close="switchPicker('isVisibleDate')"
       @choose="setChooseValue"
     >
     </nut-datepicker>
-    <InputNum 
-      title="票据号"
-      mask="1,12,8,8,1" 
-      class="inputName"
-      v-model="numValue" 
-      :max="34" 
-      @onChange="changeNum"
-    />
-    <p>Message is: {{ numValue }}</p>
   </div>
 </template>
 
 <script>
-import Input from './Input.vue'
-import InputNum from './InputNum.vue'
-import './style.scss'
+import { formatDate } from '@/utils/helper';
+import FormItem from './FormItem.vue';
+import Input from './Input.vue';
+import Imagepicker from './Imagepicker.vue';
+import './style.scss';
 
 export default {
   name: 'Form',
   components: {
     Input,
-    InputNum,
+    Imagepicker,
+    FormItem
+  },
+  props: {
+    maturityDate: { // 到期日,11位时间戳
+        type: [Number, String],
+        default: formatDate()
+    },
+    draftAmount: { // 票面金额
+        type: [Number, String],
+        default: ''
+    },
+    acceptorBankCnasp: { // 承兑人开户行联行号
+        type: [String],
+        default: ''
+    },
+    draftNo: { // 票号
+        type: [String],
+        default: ''
+    },
+    imgUrl: {
+        type: [String],
+        default: ''
+    },
   },
   data() {
     return {
-      input: '',
-      datetime: '2018-11-02',
       isActive: true,
       isVisibleDate: false,
       error: null,
-      numValue: ''
+      startDate: formatDate(),
+      imgList: []
+    };
+  },
+  watch: {
+    imgUrl: function (newValue, oldValue) {
+      if (newValue) {
+        this.imgList.splice(0, 1, {
+          id: Math.random(),
+          src: newValue
+        })
+      } else {
+        this.imgList.splice(0, 1)
+      }
+      return newValue
     }
   },
   methods: {
     // code 1 自动上传  2 不上传只展示图片  3 删除图片  4 预览图片
-    imgMsg:(data) => {
-      if(data.code == 1) {
-        alert('upload');
+    imgMsg(data) {
+      if (data.code === 4) {
+        this.$dialog({
+          type: 'image', // 设置弹窗类型为'图片弹窗'
+          lockBgScroll: true,
+          link: '', // 点击图片跳转的Url
+          imgSrc: data.src, // 图片Url
+          onClickImageLink: function () { // 图片点击事件，默认行为是跳转Url
+            return false;  // 返回false可阻止默认的链接跳转行为
+          }
+        });
       }
-    },
-    clickHandler() {
-      alert('我点击了按钮');
-    },
-    inputFun(val) {
-      console.log(val)
-    },
-    blurFun(val) {
-      console.log('blur')
-      this.input = val
+      if (data.code === 3) {
+        this.$emit('onChange', {imgUrl: null});
+      }
     },
     switchPicker(param) {
       this[`${param}`] = !this[`${param}`];
     },
     setChooseValue(param) {
-      this.datetime = param[3];
+      this.$emit('onChange', {maturityDate: param[3]});
     },
-    changeNum (val) {
-      this.numValue = val
+    changeDraftNo(val) {
+      this.$emit('onChange', {draftNo: val});
+    },
+    changeAmount(val) {
+      this.$emit('onChange', {draftAmount: val});
+    },
+    changeBankCnasp(val) {
+      this.$emit('onChange', {acceptorBankCnasp: val});
     },
   },
-  computed: {
-    classObject: function () {
-      return {
-        active: this.isActive && !this.error,
-        'text-danger': this.error && this.error.type === 'fatal'
-      }
-    }
-  }
-}
+};
 </script>
