@@ -6,12 +6,12 @@ module.exports = {
     host: '0.0.0.0',
     proxy: {
       '/api-ext': {
-        target: 'https://piaoju.jd.com',
+        target: 'https://xxxx.xx.com',
         changeOrigin: true,
         ws: true,
       },
       '/open/latest-trades': {
-        target: 'http://172.25.35.23:8888',
+        target: 'http://xxxx.xx:8888',
         changeOrigin: true,
         ws: true,
         pathRewrite: {

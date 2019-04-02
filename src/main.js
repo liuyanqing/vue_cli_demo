@@ -8,7 +8,7 @@ import './style/index.scss';
 Vue.config.productionTip = false;
 
 const axiosInstance = axios.create({
-  baseURL: process.env.NODE_ENV === 'production' ? '//' : '//',
+  baseURL: process.env.NODE_ENV === 'production' ? 'https://xxxx.xx.com/' : '//',
   headers: {
     'access-control-allow-origin': '*',
     'access-control-allow-methods': 'GET, POST, OPTIONS, PUT, DELETE',
